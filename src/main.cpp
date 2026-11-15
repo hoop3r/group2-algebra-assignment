@@ -58,7 +58,7 @@ void populate(Matrix& a, Matrix& b) {
     }
 }
 
-Element determinant(Matrix matrix) {
+Element determinantOLD(Matrix matrix) {
     Element result = Element::one();
     for (std::size_t k = 0; k < dimension; ++k) {
         std::size_t pivot_row = k;
@@ -90,6 +90,72 @@ Element determinant(Matrix matrix) {
             }
         }
     }
+    return result;
+}
+
+Element determinant(Matrix matrix) {
+    Element result = Element::one();
+
+    // P
+    std::vector<size_t> P(dimension); 
+    for (size_t i = 0; i < dimension; ++i) {
+        P[i] = i;
+    }
+
+    // L
+    Matrix L = Matrix::one();
+
+    // U
+    Matrix U = matrix;
+
+    // iterate over columns
+    for (size_t k = 0; k < dimension; ++k) {
+        // find pivot
+        size_t pivot_row = k;
+        while (pivot_row < dimension && U(pivot_row, k).is_zero()) {
+            ++pivot_row;
+        }
+        if (pivot_row == dimension) {
+            return Element::zero(); // singular
+        }
+
+        // swap P, L, U
+        if (pivot_row != k) {
+            U.swap_rows(pivot_row, k);
+
+            std::swap(P[pivot_row], P[k]);
+
+            for (size_t j = 0; j < k; ++j) {
+                std::swap(L(pivot_row, j), L(k, j));
+            }
+
+            result = result.negate();
+        }
+
+        // compute multipliers and update L and U
+        Element inverse = U(k, k).reciprocal();
+        for (size_t i = k + 1; i < dimension; ++i) {
+            if (U(i, k).is_zero()) {
+                continue;
+            }
+
+            Element multiplier = U(i, k).multiply(inverse);
+            L(i, k) = multiplier;
+
+            U(i, k) = Element::zero();
+
+            for (size_t j = k + 1; j < dimension; ++j) {
+                U(i, j) = U(i, j).add(
+                    multiplier.multiply(U(k, j)).negate()
+                );
+            }
+        }
+    }
+
+    for (size_t i = 0; i < dimension; ++i) {
+        result = result.multiply(U(i, i));
+    }
+
     return result;
 }
 
