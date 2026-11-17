@@ -1,3 +1,20 @@
+# HOW TO USE
+## Finite Field Arithmetic Caching
+Default vs. Cached finite field arithmetic can be chosen by changing the commented-out dependency in ```cmake/Dependencies.cmake```. Cached arithmetic is Jacob Nance's repo, default arithmetic is Nathan Russell's.
+
+## MPI Block PLU
+Use the same build commands. To run:
+```
+mpirun -np <num_nodes> ./build/src/algebra_determinants_mpi <mode> <block_size>
+```
+Mode must either be ```"sequential"``` or ```"mpi"```.
+
+If mode is ```"mpi"``` then ```"block_size"``` determines the block PLU parallelization, otherwise this parameter is unused/unnecessary.
+
+If mode is ```"sequential"``` then only rank 0 is used to calculate determinant with standard gaussian elimination algorithm.
+
+MPI is only used for determinants, matmul is always sequential on rank 0.
+
 # Finite field determinants
 
 Scientific software often spans several interdependent repositories. Its code may follow the algorithms and mathematical definitions of a scientific field. Computer scientists routinely learn about fields outside their formal training. Clients may be reluctant to approve a complete refactor.
