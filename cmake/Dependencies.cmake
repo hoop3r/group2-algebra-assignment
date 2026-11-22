@@ -3,8 +3,8 @@ include(FetchContent)
 if(NOT TARGET algebra::finite_fields)
     FetchContent_Declare(
         algebra_finite_fields
-        GIT_REPOSITORY git@github.com:JacobNance142/algebra-finite-fields-group2.git
-        GIT_TAG 8d784eaf8afb0e68f9ff55f0cc378232778e103c
+        GIT_REPOSITORY git@github.com:MohamedAKonsowa/algebra-finite-fields-group2.git
+        GIT_TAG 56840c9ead8e781fd18a4662dfc8dca73e612c86
     )
     FetchContent_MakeAvailable(algebra_finite_fields)
 endif()

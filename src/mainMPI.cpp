@@ -95,15 +95,7 @@ Element determinantOLD(Matrix matrix) {
 }
 
 uint64_t encode(const Element& element) {
-    uint64_t result = 0;
-    uint64_t multiplier = 1;
-
-    for (size_t i = 0; i < Field::extension_degree; ++i) {
-        result += element.coefficient(i).representative() * multiplier;
-        multiplier *= Field::characteristic;
-    }
-
-    return result;
+    return element.index();
 }
 
 Element decode(uint64_t index) {
